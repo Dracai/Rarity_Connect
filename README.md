@@ -1,2 +1,2 @@
 # Rarity_Connect
- PHP Form
+	This is a practise CodeIgniter project. (Unfinshed)

@@ -4,7 +4,7 @@
             <div class="container">
                 <h3>Login</h3>
                 <hr>
-                <form class="" action="/" method="post">
+                <form class="" action="/login" method="post">
                     <div class="form-group">
                       <label for="email">Email:</label>
                       <input type="text" class="form-control" name="email" id="email" value="<?= set_value('email')?>">

@@ -48,7 +48,7 @@
             </ul>
             <ul class="navbar-nav mr-1">
             <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
-                <a href="/"><button type="button" class="btn btn-success">Login</button></a>
+                <a href="/login"><button type="button" class="btn btn-success">Login</button></a>
                 <div class="btn-group" role="group">
                     <button id="btnGroupDrop2" type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">

@@ -5,30 +5,33 @@ use App\Models\User_Model;
 class Users extends BaseController
 {
 
-    public function login()
+    public function index()
 	{
 		echo view("templates/header");
 		echo view("home");
 		echo view("templates/footer");
 	}
 
-    public function index()
+    public function login()
     {
         $data = [];
 		helper(['form']);
 
 		if ($this->request->getMethod() == 'post') {
 			
+            //Validation rules for Logging In
 			$rules = [
 				'email' => 'required|min_length[6]|max_length[50]|valid_email',
 				'passwordHash' => 'required|min_length[8]|max_length[255]|validateUser[email, passwordHash]',
 			];
-
+            
+            //Error messga for when Email and Password don't match the database
 			$errors = [
 				'passwordHash' => [
 					'validateUser' => 'Email or Password don\'t match'
 				]
 			];
+
 
 			if (! $this->validate($rules, $errors)) {
 				$data['validation'] = $this->validator;
@@ -69,6 +72,7 @@ class Users extends BaseController
 
         if($this->request->getMethod() == 'post')
         {
+            //Validation Rules for registering
             $rules = [
                 'firstName' => 'required|min_length[3]|max_length[45]',
                 'lastName' => 'required|min_length[3]|max_length[45]',
@@ -99,6 +103,11 @@ class Users extends BaseController
         echo view('templates/header', $data);
         echo view('register');
         echo view('templates/footer');
+    }
+
+    public function logout(){
+        session()->destroy();
+        return redirect()->to('/');
     }
 
 }

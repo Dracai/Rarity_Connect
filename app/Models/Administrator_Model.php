@@ -2,9 +2,9 @@
 
 use CodeIgniter\Model;
 
-class User_Model extends Model
+class Administrator_Model extends Model
 {
-    protected $table = 'user';
+    protected $table = 'administrator';
     protected $allowedFields = ['firstName', 'lastName', 'email', 'passwordHash'];
     protected $beforeInsert = ['beforeInsert'];
     protected $beforeUpdate = ['beforeUpdate'];
@@ -30,7 +30,7 @@ class User_Model extends Model
         return $data;
     }
 
-    public function userCheck($email)
+    public function adminCheck($email)
     {
         $builder = $this->builder();
         $query = $builder->getWhere(['email' => $email])->getFirstRow();

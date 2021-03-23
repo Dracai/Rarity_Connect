@@ -2,6 +2,8 @@
 
 namespace Config;
 
+use App\Controllers\Administrator;
+
 // Create a new instance of our RouteCollection class.
 $routes = Services::routes();
 
@@ -34,6 +36,9 @@ $routes->setAutoRoute(true);
 // route since we don't have to scan directories.
 $routes->get('/', 'GeneralUser::index');
 $routes->get('logout', 'GeneralUser::logout');
+$routes->get('dashboard', 'GeneralUser::dashboard', ['filter' => 'allAuth']);
+$routes->get('admin_functions_page', 'Administrator::viewUsers', ['filter' => 'auth']);
+$routes->get('aboutus', 'GeneralUser::aboutUs');
 $routes->match(['get', 'post'], 'login', 'GeneralUser::login');
 $routes->match(['get', 'post'], 'register', 'GeneralUser::register');
 

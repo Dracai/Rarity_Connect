@@ -4,7 +4,7 @@
             <div class="container">
                 <h3>Register</h3>
                 <hr>
-                <form class="" action="register" method="post">
+                <form class="" action="<?php echo base_url();?>/register" method="post">
                     <div class="row">
                         <div class="col-12 col-sm-6">
                             <div class="form-group">
@@ -50,7 +50,7 @@
                             <button type="submit" class="btn btn-primary">Register</button>
                         </div>
                         <div class="col-12 col-sm-8 text-right">
-                            <a href="/">Already have an account?</a>
+                            <a href="<?php echo base_url();?>/login">Already have an account?</a>
                         </div>
                     </div>
                 </form>

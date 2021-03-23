@@ -34,6 +34,7 @@ class User_Model extends Model
     {
         $builder = $this->builder();
         $query = $builder->getWhere(['email' => $email])->getFirstRow();
+
         if($query)
         {
             return true;
@@ -42,5 +43,22 @@ class User_Model extends Model
         {
             return false;
         }
+    }
+
+    public function checkPassword($email, $passwordHash)
+    {
+        $userModel = new User_Model();
+
+        $user = $userModel->where('email', $email)
+                    ->first();
+
+        if($user)
+            return password_verify($passwordHash, $user['passwordHash']);
+        else
+            return false;
+    }
+
+    public function getUsers() {
+        return $this->findAll();
     }
 }

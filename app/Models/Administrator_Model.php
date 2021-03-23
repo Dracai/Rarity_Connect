@@ -34,6 +34,7 @@ class Administrator_Model extends Model
     {
         $builder = $this->builder();
         $query = $builder->getWhere(['email' => $email])->getFirstRow();
+
         if($query)
         {
             return true;
@@ -42,5 +43,19 @@ class Administrator_Model extends Model
         {
             return false;
         }
+
+    }
+
+    public function checkPassword($email, $passwordHash)
+    {
+        $adminModel = new Administrator_Model();
+
+        $admin = $adminModel->where('email', $email)
+                    ->first();
+
+        if($admin)
+            return password_verify($passwordHash, $admin['passwordHash']);
+        else
+            return false;
     }
 }

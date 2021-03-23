@@ -12,8 +12,9 @@
     <hr class="my-4">
     <p>I hope you have a great day !</p>
     <p class="lead">
-      <a class="btn btn-primary btn-lg" href="/register" role="button">Register</a>
+      <a class="btn btn-primary btn-lg" href="<?php echo base_url();?>/register" role="button">Register</a>
     </p>
+      </div>
   </div>
-</div>
+</div>  
 </section>

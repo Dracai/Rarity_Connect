@@ -21,40 +21,31 @@ class GeneralUser extends BaseController
         $adminModel = new Administrator_Model();
 
 		if ($this->request->getMethod() == 'post') {
-			
-            //Validation rules for Logging In
-			$rules = [
-				'email' => 'required|min_length[6]|max_length[50]|valid_email',
-				'passwordHash' => 'required|min_length[8]|max_length[255]|validateUser[email, passwordHash]',
-			];
-            
-            //Error messgae for when Email and Password don't match the database
-			$errors = [
-				'passwordHash' => [
-					'validateUser' => 'Email or Password don\'t match'
-				]
-			];
 
+            //$passwordCheck = password_hash($_POST['passwordHash'], PASSWORD_DEFAULT);
+            //$adminModel->adminCheck($_POST['email'], $_POST['passwordHash'])
 
-			if ($adminModel->adminCheck($_POST['email']))
+			if($adminModel->adminCheck($_POST['email']) && $adminModel->checkPassword($_POST['email'], $_POST['passwordHash']))
             {
                     $admin = $adminModel->where('email', $_POST['email'])
 								    ->first();
 
                     $this->setAdminSession($admin);
-                    return redirect()->to('dashboard');
+                    return redirect()->to('/dashboard');
             }
-            else if ($userModel->userCheck($_POST['email']))
+            else if ($userModel->userCheck($_POST['email']) && $userModel->checkPassword($_POST['email'], $_POST['passwordHash']))
             {
                     $user = $userModel->where('email', $_POST['email'])
 								    ->first();
 
                     $this->setUserSession($user);
-                    return redirect()->to('dashboard');
+                    return redirect()->to('/dashboard');
             }
             else 
             {
-
+                $session = session();
+                $session->setFlashdata('failed', 'Email and Password don\'t match');
+                return redirect()->to('/login');
             }
         }
         echo view('templates/header', $data);
@@ -101,7 +92,7 @@ class GeneralUser extends BaseController
             $rules = [
                 'firstName' => 'required|min_length[3]|max_length[45]',
                 'lastName' => 'required|min_length[3]|max_length[45]',
-                'email' => 'required|min_length[6]|max_length[45]|valid_email|is_unique[user.email]',
+                'email' => 'required|min_length[6]|max_length[45]|valid_email|is_unique[user.email]|is_unique[administrator.email]|is_unique[moderator.email]',
                 'passwordHash' => 'required|min_length[8]|max_length[255]',
                 'passwordHash_confirm' => 'matches[passwordHash]',
             ];
@@ -135,4 +126,21 @@ class GeneralUser extends BaseController
         return redirect()->to('/');
     }
 
+    public function aboutUs()
+    {
+        $data = [];
+
+        echo view('templates/header', $data);
+        echo view('aboutus');
+        echo view('templates/footer');
+    }
+
+    public function dashboard()
+	{
+		$data = [];
+
+		echo view("templates/header", $data);
+		echo view("dashboard");
+		echo view("templates/footer");
+	}
 }

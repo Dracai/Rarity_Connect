@@ -8,9 +8,8 @@ class Home extends BaseController
 	{
 		$data = [];
 
-		echo view("templates/header", $data);
-		echo view("home");
-		echo view("templates/footer");
-
+			echo view("templates/header", $data);
+			echo view("home");
+			echo view("templates/footer");
 	}
 }

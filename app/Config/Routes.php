@@ -39,6 +39,7 @@ $routes->get('logout', 'GeneralUser::logout');
 $routes->get('dashboard', 'GeneralUser::dashboard', ['filter' => 'allAuth']);
 $routes->get('admin_functions_page', 'Administrator::viewUsers', ['filter' => 'auth']);
 $routes->get('aboutus', 'GeneralUser::aboutUs');
+$routes->match(['get', 'post'], 'viewUsers', 'Administrator::viewUsers');
 $routes->match(['get', 'post'], 'login', 'GeneralUser::login');
 $routes->match(['get', 'post'], 'register', 'GeneralUser::register');
 

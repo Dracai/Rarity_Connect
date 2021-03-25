@@ -61,4 +61,16 @@ class User_Model extends Model
     public function getUsers() {
         return $this->findAll();
     }
+
+    function search($keyword)
+    {
+        $builder = $this->builder();
+        $query = $builder->getWhere(['idUser' => $keyword])->getFirstRow();
+        
+        if($query){
+            return $query;
+        }   
+        else
+            return null;
+    }
 }

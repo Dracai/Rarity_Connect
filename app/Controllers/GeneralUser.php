@@ -2,6 +2,8 @@
 
 use App\Models\User_Model;
 use App\Models\Administrator_Model;
+use App\Models\Moderator_Model;
+use App\Models\Posts_Model;
 
 class GeneralUser extends BaseController
 {
@@ -22,8 +24,10 @@ class GeneralUser extends BaseController
 		helper(['form']);
 
         //Here I am just getting instances of each model
-        $userModel = new User_Model();
         $adminModel = new Administrator_Model();
+        $modModel = new Moderator_Model();
+        $userModel = new User_Model();
+        
 
 		if ($this->request->getMethod() == 'post') {
 
@@ -37,6 +41,14 @@ class GeneralUser extends BaseController
 
                 //Calls the function to set the user session
                 $this->setAdminSession($admin);
+                return redirect()->to('/dashboard');
+            }
+            else if($modModel->modCheck($_POST['email']) && $modModel->checkPassword($_POST['email'], $_POST['passwordHash']))
+            {
+                $mod = $modModel->where('email', $_POST['email'])
+								->first();
+
+                $this->setModSession($mod);
                 return redirect()->to('/dashboard');
             }
             else if ($userModel->userCheck($_POST['email']) && $userModel->checkPassword($_POST['email'], $_POST['passwordHash']))
@@ -61,6 +73,34 @@ class GeneralUser extends BaseController
         echo view('templates/footer');
     }
 
+    private function setAdminSession($admin)
+    {
+        $data = [
+            'idAdmin' => $admin['idAdmin'],
+            'firstName' => $admin['firstName'],
+            'lastName' => $admin['lastName'],
+            'email' => $admin['email'],
+            'isLoggedInAdmin' => true,
+        ];
+
+        session()->set($data);
+        return true;
+    }
+
+    private function setModSession($mod)
+    {
+        $data = [
+            'idMod' => $mod['idMod'],
+            'firstName' => $mod['firstName'],
+            'lastName' => $mod['lastName'],
+            'email' => $mod['email'],
+            'isLoggedInMod' => true,
+        ];
+
+        session()->set($data);
+        return true;
+    }
+
     private function setUserSession($user)
     {
         //Gets data about the user and sets the session
@@ -74,20 +114,6 @@ class GeneralUser extends BaseController
 
         //This sets the session for the User and sets the LoggedIn 
         //state to true
-        session()->set($data);
-        return true;
-    }
-
-    private function setAdminSession($admin)
-    {
-        $data = [
-            'idAdmin' => $admin['idAdmin'],
-            'firstName' => $admin['firstName'],
-            'lastName' => $admin['lastName'],
-            'email' => $admin['email'],
-            'isLoggedInAdmin' => true,
-        ];
-
         session()->set($data);
         return true;
     }
@@ -167,4 +193,85 @@ class GeneralUser extends BaseController
 		echo view("dashboard");
 		echo view("templates/footer");
 	}
+
+    public function displayPosts()
+    {
+        $model = new Posts_Model();
+
+        $data['news'] = $model->getPosts();
+
+        echo view("templates/header", $data);
+		echo view("forum/postsPage");
+		echo view("templates/footer");
+    }
+
+    public function viewPost($postID)
+    {
+        $model = new Posts_Model();
+
+        $data['post'] = $model->getPosts($postID);
+
+        echo view("templates/header", $data);
+		echo view("forum/posts");
+		echo view("templates/footer");
+    }
+
+    public function createPost()
+    {
+        $data = [];
+
+        helper(['form']);
+
+        if($this->request->getMethod() == 'post')
+        {
+            $rules = [
+                'title' => 'required|min_length[5]|max_length[100]',
+                'content' => 'required|min_length[5]|max_length[255]'
+            ];
+
+            if(!$this->validate($rules))
+            {
+                $data['validation'] = $this->validator;
+            }else
+            {
+                $model = new Posts_Model();
+                if(session()->get('isLoggedInUser'))
+                {
+                    $userID = session()->get('idUser');
+
+                    $model->save(
+                    [
+                        'userID' => $userID,
+                        'title' => $this->request->getVar('title'),
+                        'content' =>$this->request->getVar('content')
+                    ]
+                    );
+
+                    $session = session();
+                    $session->setFlashData('posted', 'Post has been posted !');
+                    return redirect()->to('/forum/postsPage');
+                }
+                elseif(session()->get('isLoggedInAdmin'))
+                {
+                    $adminID = session()->get('idAdmin');
+
+                    $model->save(
+                    [
+                        'adminID' => $adminID,
+                        'title' => $this->request->getVar('title'),
+                        'content' =>$this->request->getVar('content')
+                    ]
+                    );
+
+                    $session = session();
+                    $session->setFlashData('posted', 'Post has been posted !');
+                    return redirect()->to('/forum/postsPage');
+                }
+            }
+        }
+
+        echo view("templates/header", $data);
+		echo view("forum/createPost");
+		echo view("templates/footer");
+    }
 }

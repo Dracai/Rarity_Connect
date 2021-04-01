@@ -9,7 +9,7 @@ class AllAuth implements FilterInterface
     public function before(RequestInterface $request, $arguments = null)
     {
         // if user not logged in
-        if(!session()->get('isLoggedInAdmin') && !session()->get('isLoggedInUser')){
+        if(!session()->get('isLoggedInAdmin') && !session()->get('isLoggedInUser') && !session()->get('isLoggedInMod')){
             // then redirct to login page
             return redirect()->to('/login');
         }

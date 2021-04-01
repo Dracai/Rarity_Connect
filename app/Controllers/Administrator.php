@@ -1,7 +1,8 @@
 <?php namespace App\Controllers;
 
-use App\Models\User_Model;
 use App\Models\Administrator_Model;
+use App\Models\User_Model;
+use App\Models\Posts_Model;
 
 class Administrator extends BaseController 
 {

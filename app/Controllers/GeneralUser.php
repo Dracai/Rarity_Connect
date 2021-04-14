@@ -2,11 +2,14 @@
 
 use App\Models\User_Model;
 use App\Models\Administrator_Model;
+use App\Models\Comments_Model;
 use App\Models\Moderator_Model;
 use App\Models\Posts_Model;
 
 class GeneralUser extends BaseController
 {
+
+    // Routing -> $routes->get('view', 'controller', [filter] );
 
     public function index()
 	{
@@ -187,11 +190,22 @@ class GeneralUser extends BaseController
 
     public function dashboard()
 	{
-		$data = [];
+		$model = new Posts_Model();
 
-		echo view("templates/header", $data);
-		echo view("dashboard");
-		echo view("templates/footer");
+        $data['newest'] = $model->getNewestPosts();
+
+        if($data){
+            echo view("templates/header", $data);
+            echo view("dashboard");
+            echo view("templates/footer");
+        }
+        else
+        {
+            $data = [];
+            echo view("templates/header", $data);
+            echo view("dashboard");
+            echo view("templates/footer");
+        }
 	}
 
     public function displayPosts()
@@ -207,13 +221,62 @@ class GeneralUser extends BaseController
 
     public function viewPost($postID)
     {
-        $model = new Posts_Model();
+        $data = [];
 
-        $data['post'] = $model->getPosts($postID);
+        helper(['form']);
 
-        echo view("templates/header", $data);
-		echo view("forum/posts");
-		echo view("templates/footer");
+        $postModel = new Posts_Model();
+        $model = new Comments_Model();
+
+        if($this->request->getMethod() == 'post') 
+        {
+            $rules = [
+                'comment' => 'required|min_length[5]|max_length[255]'
+            ];
+
+            if(!$this->validate($rules))
+            {
+                $data['validation'] = $this->validator;
+            }else
+            {
+                if(session()->get('isLoggedInUser'))
+                {
+                    $commentModel = new Comments_Model();
+                    $userID = session()->get('idUser');
+                    $userName = session()->get('firstName').' '.session()->get('lastName');
+
+                    $urlsplit = explode('/',current_url());
+                    $postID = $urlsplit[count($urlsplit)-1];
+
+                    $commentModel->save(
+                    [
+                            'postID' => $postID,
+                            'userID' => $userID,
+                            'content' => $this->request->getVar('comment'),
+                            'authorName' => $userName
+                    ]);
+                    $session = session();
+                    $session->setFlashData('commented', 'Comment has been created !');
+                    return redirect()->to('/forum/'.$postID);
+                }    
+            }
+        }
+
+        $postData['post'] = $postModel->getPosts($postID);
+        $comments['comment'] = $model->getComments($postID);
+        print_r($comments);
+        if($comments){
+            echo view("templates/header", $postData + $comments);
+            echo view("forum/posts");
+            echo view("templates/footer");
+        }
+        else{
+
+            $comments['comment'] = [];
+            echo view("templates/header", $postData + $comments);
+            echo view("forum/posts");
+            echo view("templates/footer");
+        }
     }
 
     public function createPost()
@@ -238,14 +301,15 @@ class GeneralUser extends BaseController
                 if(session()->get('isLoggedInUser'))
                 {
                     $userID = session()->get('idUser');
+                    $userName = session()->get('firstName').' '.session()->get('lastName');
 
                     $model->save(
                     [
                         'userID' => $userID,
                         'title' => $this->request->getVar('title'),
-                        'content' =>$this->request->getVar('content')
-                    ]
-                    );
+                        'content' =>$this->request->getVar('content'),
+                        'authorName' => $userName
+                    ]);
 
                     $session = session();
                     $session->setFlashData('posted', 'Post has been posted !');
@@ -254,14 +318,15 @@ class GeneralUser extends BaseController
                 elseif(session()->get('isLoggedInAdmin'))
                 {
                     $adminID = session()->get('idAdmin');
+                    $adminName = session()->get('firstName').' '.session()->get('lastName');
 
                     $model->save(
                     [
                         'adminID' => $adminID,
                         'title' => $this->request->getVar('title'),
-                        'content' =>$this->request->getVar('content')
-                    ]
-                    );
+                        'content' =>$this->request->getVar('content'),
+                        'authorName' => $adminName
+                    ]);
 
                     $session = session();
                     $session->setFlashData('posted', 'Post has been posted !');
@@ -273,5 +338,41 @@ class GeneralUser extends BaseController
         echo view("templates/header", $data);
 		echo view("forum/createPost");
 		echo view("templates/footer");
+    }
+
+    public function commentOnPost() 
+    {
+        $data = [];
+
+        helper(['form']);
+
+        if($this->request->getMethod() == 'post')
+        {
+            $rules = [
+                'comment' => 'required|min_length[5]|max_length[255]'
+            ];
+
+            if(!$this->validate($rules))
+            {
+                $data['validation'] = $this->validator;
+            }else
+            {
+                $model = new Comments_Model();
+                if(session()->get('isLoggedInUser'))
+                {
+                    $userID = session()->get('idUser');
+                    $userName = session()->get('firstName').' '.session()->get('lastName');
+                    $postID = $this->uri->segment(4);
+
+                    $model->save(
+                    [
+                            'postID' => $postID,
+                            'idUser' => $userID,
+                            'content' => $this->request->getVar('comment'),
+                            'authorName' => $userName
+                    ]);
+                }    
+            }
+        }
     }
 }

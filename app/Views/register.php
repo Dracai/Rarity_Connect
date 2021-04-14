@@ -47,7 +47,7 @@
 
                     <div class="row">
                         <div class="col-12 col-sm-4">
-                            <button type="submit" class="btn btn-primary">Register</button>
+                            <button type="submit" class="btn btn-primary" style="border-radius:4px;">Register</button>
                         </div>
                         <div class="col-12 col-sm-8 text-right">
                             <a href="<?php echo base_url();?>/login">Already have an account?</a>

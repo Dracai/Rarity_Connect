@@ -39,12 +39,14 @@ $routes->get('logout', 'GeneralUser::logout');
 $routes->get('dashboard', 'GeneralUser::dashboard', ['filter' => 'allAuth']);
 $routes->get('admin_functions_page', 'Administrator::viewUsers', ['filter' => 'auth']);
 $routes->get('aboutus', 'GeneralUser::aboutUs');
+$routes->match(['get', 'post'], 'profile', 'Users::profile');
 $routes->get('forum/postsPage', 'GeneralUser::displayPosts');
-$routes->get('forum/(:any)', 'GeneralUser::viewPost/$1');
+$routes->match(['get', 'post'], 'forum/createPost', 'GeneralUser::createPost');
+$routes->match(['get', 'post'], 'forum/(:any)', 'GeneralUser::viewPost/$1');
 $routes->match(['get', 'post'], 'viewUsers', 'Administrator::viewUsers');
 $routes->match(['get', 'post'], 'login', 'GeneralUser::login');
 $routes->match(['get', 'post'], 'register', 'GeneralUser::register');
-$routes->match(['get', 'post'], 'forum/createPost', 'GeneralUser::createPost');
+
 
 /*
  * --------------------------------------------------------------------

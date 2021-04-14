@@ -2,10 +2,10 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
+        <link href="/assets/css/style.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
         <link rel="stylesheet" href="https://bootswatch.com/4/pulse/bootstrap.css">
-        <link rel="stylesheet" href="/assets/css/style.css">
-        
+
         <title>Rarity Connect</title>
     </head>
     <body>
@@ -37,7 +37,7 @@
             </ul>
             <ul class="navbar-nav my-2 my-lg-0">
                 <li class="nav-item">
-                    <a href="<?php echo base_url();?>/logout" class="btn btn-danger">Logout</a>
+                    <a href="<?php echo base_url();?>/logout" class="btn btn-danger" style="border-radius: 4px;">Logout</a>
                 </li>
             </ul>
         </div>
@@ -67,7 +67,7 @@
                     <a class="nav-link" href="<?php echo base_url();?>#">UnderConstruction</a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?php echo base_url();?>/logout" class="btn btn-danger">Logout</a>
+                    <a href="<?php echo base_url();?>/logout" class="btn btn-danger" style="border-radius:4px;">Logout</a>
                 </li>
             </ul>
         </div>
@@ -94,10 +94,10 @@
             </ul>
             <ul class="navbar-nav my-2 my-lg-0">
                 <li class="nav-item" style="margin-right: 1em;">
-                    <a class="nav-link" href="<?php echo base_url();?>#">UnderConstruction</a>
+                    <a class="nav-link" href="<?php echo base_url();?>/profile">Profile</a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?php echo base_url();?>/logout" class="btn btn-danger">Logout</a>
+                    <a href="<?php echo base_url();?>/logout" class="btn btn-danger" style="border-radius:4px;">Logout</a>
                 </li>
             </ul>
         </div>
@@ -121,12 +121,12 @@
             </ul>
             <ul class="navbar-nav mr-1">
                 <li class="nav-item">
-                    <a href="<?php echo base_url();?>/login" class="btn btn-success">Login</a>
+                    <a href="<?php echo base_url();?>/login" class="btn btn-success" style="border-radius:4px;">Login</a>
                 </li>
             </ul>
             <ul class="navbar-nav mr-1">
                 <li class="nav-item">
-                    <a href="<?php echo base_url();?>/register" class="btn btn-info">Register</a>
+                    <a href="<?php echo base_url();?>/register" class="btn btn-info" style="border-radius:4px;">Register</a>
                 </li>
             </ul>
         </div>

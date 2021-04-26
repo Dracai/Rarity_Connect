@@ -4,12 +4,12 @@ use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\Filters\FilterInterface;
  
-class AllAuth implements FilterInterface
+class UserAuth implements FilterInterface
 {
     public function before(RequestInterface $request, $arguments = null)
     {
         // if user not logged in
-        if(!session()->get('isLoggedInAdmin') && !session()->get('isLoggedInUser')){
+        if(!session()->get('isLoggedInUser')){
             // then redirct to login page
             return redirect()->to('/login');
         }

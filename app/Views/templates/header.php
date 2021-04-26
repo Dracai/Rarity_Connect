@@ -34,40 +34,13 @@
                 <li class="nav-item">
                     <a class="nav-link" href="<?php echo base_url();?>/forum/postsPage">View Posts</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?php echo base_url();?>/forum/reported_posts">View Reported Posts</a>
+                </li>
             </ul>
             <ul class="navbar-nav my-2 my-lg-0">
                 <li class="nav-item">
                     <a href="<?php echo base_url();?>/logout" class="btn btn-danger" style="border-radius: 4px;">Logout</a>
-                </li>
-            </ul>
-        </div>
-
-        <?php elseif (session()->get('isLoggedInMod')):?>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-            <div class='container'>
-                <a class="navbar-brand" href="<?php echo base_url();?>/dashboard">Rarity Connect</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="<?php echo base_url();?>/dashboard">Dashboard</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="<?php echo base_url();?>/forum/postsPage">View Posts</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="<?php echo base_url();?>#">Moderator Functions</a>
-                </li>
-            </ul>
-            <ul class="navbar-nav my-2 my-lg-0">
-                <li class="nav-item" style="margin-right: 1em;">
-                    <a class="nav-link" href="<?php echo base_url();?>#">UnderConstruction</a>
-                </li>
-                <li class="nav-item">
-                    <a href="<?php echo base_url();?>/logout" class="btn btn-danger" style="border-radius:4px;">Logout</a>
                 </li>
             </ul>
         </div>

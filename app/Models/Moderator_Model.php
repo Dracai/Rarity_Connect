@@ -14,7 +14,7 @@ class Moderator_Model extends Model
         $data = $this->hashingPassword($data);
         return $data;
     }
-
+    
     protected function beforeUpdate(array $data)
     {
         $data = $this->hashingPassword($data);
@@ -57,5 +57,27 @@ class Moderator_Model extends Model
             return password_verify($passwordHash, $mod['passwordHash']);
         else
             return false;
+    }
+
+    public function getMods() {
+        return $this->findAll();
+    }
+
+    function deleteMod($idMod)
+    {
+        $this->db->table('moderator')->where('idMod', $idMod)->delete();
+        return;
+    }
+
+    public function searchMod($keyword)
+    {
+        $builder = $this->builder();
+        $query = $builder->getWhere(['idMod' => $keyword])->getFirstRow();
+        
+        if($query){
+            return $query;
+        }   
+        else
+            return null;
     }
 }

@@ -31,4 +31,10 @@ class Posts_Model extends Model
                     ->where(['userID' => $userID])
                     ->findAll();
     }
+
+    function deletePost($postID)
+    {
+        $this->db->table('post')->where('postID', $postID)->delete();
+        return;
+    }
 }

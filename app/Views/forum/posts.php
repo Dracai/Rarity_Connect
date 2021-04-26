@@ -1,5 +1,12 @@
 <section>
     <div class="container">
+
+    <?php if (session()->get('deletedComment')): ?>
+            <div class="alert alert-danger" role="alert" style="margin-top: 1em; text-align: center;">
+                <?= session()->get('deletedComment')?>
+            </div>
+    <?php endif; ?>
+
         <div class="card border-primary mb-3" style="max-width: 100%; margin-top: 1em;">
             <div class="card-header col-sm-12 d-flex justify-content-between">
                 <p><span style="font-size: 2em;"><?= $post['title']?></span><span>&nbsp; | Author: <?= $post['authorName']?></span></p>
@@ -18,6 +25,12 @@
             <div class="card-header col-sm-12 d-flex justify-content-between">
             <p><span style="font-size: 2em;"><?= $item['authorName']?></span>
             <p>Posted on: <?= date('M d Y', strtotime($item['publishedAT']))?></p>
+            <?php if(session()->get('isLoggedInAdmin')):?>
+            <a href="<?php echo site_url('Administrator/deleteComment/'.$item['commentID']);?>" 
+                onclick="return confirm('Do you want to delete this User?');">
+                    <button id="button_delete">Delete</button>
+            </a>
+            <?php endif; ?>
             </div>
                 <div class="card-body">
                     <p class="card-text" style="font-size: 1.3em;"><?= $item['content']?></p>

@@ -13,4 +13,10 @@ class Comments_Model extends Model
                     ->where(['postID' => $postID])
                     ->findAll();
     }
+
+    function deleteComment($commentID)
+    {
+        $this->db->table('postcomment')->where('commentID', $commentID)->delete();
+        return;
+    }
 }

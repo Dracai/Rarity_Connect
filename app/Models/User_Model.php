@@ -5,7 +5,7 @@ use CodeIgniter\Model;
 class User_Model extends Model
 {
     protected $table = 'user';
-    protected $allowedFields = ['firstName', 'lastName', 'email', 'passwordHash'];
+    protected $allowedFields = ['idUser','firstName', 'lastName', 'email', 'passwordHash', 'updated_at'];
     protected $beforeInsert = ['beforeInsert'];
     protected $beforeUpdate = ['beforeUpdate'];
 
@@ -62,7 +62,7 @@ class User_Model extends Model
         return $this->findAll();
     }
 
-    function search($keyword)
+    public function searchUser($keyword)
     {
         $builder = $this->builder();
         $query = $builder->getWhere(['idUser' => $keyword])->getFirstRow();
@@ -72,5 +72,19 @@ class User_Model extends Model
         }   
         else
             return null;
+    }
+
+    public function updatePassword($idUser, $newPassword) 
+    {
+        $builder = $this->builder();
+        $builder->set('passwordHash', password_hash($newPassword, PASSWORD_DEFAULT))
+                ->where('idUser', $idUser)
+                ->update();
+    }
+
+    function deleteUser($idUser)
+    {
+        $this->db->table('user')->where('idUser', $idUser)->delete();
+        return;
     }
 }

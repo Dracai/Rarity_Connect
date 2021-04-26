@@ -21,21 +21,24 @@
         <h2 style="margin-top: 1.5em;">Comments:</h2>
         <?php if ($comment): ?>
             <?php foreach($comment as $item): ?>
-        <div class="card border-secondary mb-3" style="max-width: 100%; margin-top: 1em;">
-            <div class="card-header col-sm-12 d-flex justify-content-between">
-            <p><span style="font-size: 2em;"><?= $item['authorName']?></span>
-            <p>Posted on: <?= date('M d Y', strtotime($item['publishedAT']))?></p>
-            <?php if(session()->get('isLoggedInAdmin')):?>
-            <a href="<?php echo site_url('Administrator/deleteComment/'.$item['commentID']);?>" 
-                onclick="return confirm('Do you want to delete this User?');">
-                    <button id="button_delete">Delete</button>
-            </a>
-            <?php endif; ?>
-            </div>
-                <div class="card-body">
-                    <p class="card-text" style="font-size: 1.3em;"><?= $item['content']?></p>
+                <div class="col">
+                    <div class="card" style="margin-bottom: 1em;">
+                    <div class="card-body">
+                        <h5 class="card-header col-sm-12 d-flex justify-content-between"><?= $item['authorName']?>
+                        <p>Posted on: <?= date('M d Y', strtotime($item['publishedAT']))?></p>
+                        <?php if(session()->get('isLoggedInAdmin')):?>
+                        <a href="<?php echo site_url('Administrator/deleteComment/'.$item['commentID']);?>" 
+                            onclick="return confirm('Do you want to delete this User?');">
+                                <button id="button_delete" type="button" class="btn btn-primary" style="border-radius: 4px;">Delete</button>
+                        </a>
+                        <?php endif; ?>
+                        </h5>
+                        <p class="card-text" style="margin-top: 1em;">
+                            <?= $item['content']?>
+                        </p>
+                    </div>
+                    </div>
                 </div>
-        </div>
         <?php endforeach; ?>
 
         <?php else: ?>

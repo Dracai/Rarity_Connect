@@ -13,6 +13,11 @@
                         <?= session()->get('failed')?>
                     </div>
                 <?php endif; ?>
+                <?php if (session()->get('banned')): ?>
+                    <div class="alert alert-warning" role="alert">
+                        <?= session()->get('banned')?>
+                    </div>
+                <?php endif; ?>
                 <form class="" action="<?php echo base_url();?>/login" method="post">
                     <div class="form-group">
                       <label for="email">Email:</label>

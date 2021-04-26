@@ -36,17 +36,18 @@ $routes->setAutoRoute(true);
 // route since we don't have to scan directories.
 $routes->get('/', 'GeneralUser::index');
 $routes->get('logout', 'GeneralUser::logout');
-$routes->get('dashboard', 'GeneralUser::dashboard', ['filter' => 'allAuth']);
+$routes->get('dashboard', 'GeneralUser::dashboard', ['filter' => 'AllAuth']);
 $routes->get('admin_functions_page', 'Administrator::viewUsers', ['filter' => 'AdminAuth']);
 $routes->get('aboutus', 'GeneralUser::aboutUs');
+$routes->get('rules', 'GeneralUser::rules');
 $routes->match(['get', 'post'], 'profile', 'Users::profile', ['filter' => 'UserAuth']);
-$routes->get('forum/reported_posts', 'Administrator::displayReportedPosts');
-$routes->get('forum/postsPage', 'GeneralUser::displayPosts', ['filter' => 'allAuth']);
-$routes->match(['get', 'post'], 'forum/createPost', 'GeneralUser::createPost', ['filter' => 'allAuth']);
-$routes->match(['get', 'post'], 'forum/(:any)', 'GeneralUser::viewPost/$1', ['filter' => 'allAuth']);
-$routes->match(['get', 'post'], 'viewUsers', 'Administrator::viewUsers', ['filter' => 'allAuth']);
-$routes->match(['get', 'post'], 'login', 'GeneralUser::login');
-$routes->match(['get', 'post'], 'register', 'GeneralUser::register');
+$routes->get('forum/reported_posts', 'Administrator::displayReportedPosts', ['filter' => 'AdminAuth']);
+$routes->get('forum/postsPage', 'GeneralUser::displayPosts', ['filter' => 'AllAuth']);
+$routes->match(['get', 'post'], 'forum/createPost', 'GeneralUser::createPost', ['filter' => 'AllAuth']);
+$routes->match(['get', 'post'], 'forum/(:any)', 'GeneralUser::viewPost/$1', ['filter' => 'AllAuth']);
+$routes->match(['get', 'post'], 'viewUsers', 'Administrator::viewUsers', ['filter' => 'AllAuth']);
+$routes->match(['get', 'post'], 'login', 'GeneralUser::login', ['filter' => 'LoggedInAuth']);
+$routes->match(['get', 'post'], 'register', 'GeneralUser::register', ['filter' => 'LoggedInAuth']);
 
 
 /*

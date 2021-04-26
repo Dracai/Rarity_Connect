@@ -5,6 +5,7 @@ use App\Models\Administrator_Model;
 use App\Models\Comments_Model;
 use App\Models\Moderator_Model;
 use App\Models\Posts_Model;
+use App\Models\BannedUsers_Model;
 
 class GeneralUser extends BaseController
 {
@@ -29,36 +30,47 @@ class GeneralUser extends BaseController
         //Here I am just getting instances of each model
         $adminModel = new Administrator_Model();
         $userModel = new User_Model();
+        $bannedUsers = new BannedUsers_Model();
         
 
-		if ($this->request->getMethod() == 'post') {
-
-            //Functions in the if statments are validations for if the user exists
-            //and if the inputted password corresponds to the User found in the db
-			if($adminModel->adminCheck($_POST['email']) && $adminModel->checkPassword($_POST['email'], $_POST['passwordHash']))
+		if ($this->request->getMethod() == 'post') 
+        {
+            if(!$bannedUsers->checkIfBanned($_POST['email']))
             {
-                //Looks in the database for the user with the corresponding email
-                $admin = $adminModel->where('email', $_POST['email'])
-								    ->first();
 
-                //Calls the function to set the user session
-                $this->setAdminSession($admin);
-                return redirect()->to('/dashboard');
-            }
-            else if ($userModel->userCheck($_POST['email']) && $userModel->checkPassword($_POST['email'], $_POST['passwordHash']))
-            {
-                $user = $userModel->where('email', $_POST['email'])
-								->first();
+                //Functions in the if statments are validations for if the user exists
+                //and if the inputted password corresponds to the User found in the db
+                if($adminModel->adminCheck($_POST['email']) && $adminModel->checkPassword($_POST['email'], $_POST['passwordHash']))
+                {
+                    //Looks in the database for the user with the corresponding email
+                    $admin = $adminModel->where('email', $_POST['email'])
+                                        ->first();
 
-                $this->setUserSession($user);
-                return redirect()->to('/dashboard');
+                    //Calls the function to set the user session
+                    $this->setAdminSession($admin);
+                    return redirect()->to('/dashboard');
+                }
+                else if ($userModel->userCheck($_POST['email']) && $userModel->checkPassword($_POST['email'], $_POST['passwordHash']))
+                {
+                    $user = $userModel->where('email', $_POST['email'])
+                                    ->first();
+
+                    $this->setUserSession($user);
+                    return redirect()->to('/dashboard');
+                }
+                else 
+                {
+                    $session = session();
+                    //If logging in was unsucessful then flashdata is set to show
+                    //that the login was unsucessful
+                    $session->setFlashdata('failed', 'Email and Password don\'t match');
+                    return redirect()->to('/login');
+                }
             }
-            else 
+            else
             {
                 $session = session();
-                //If logging in was unsucessful then flashdata is set to show
-                //that the login was unsucessful
-                $session->setFlashdata('failed', 'Email and Password don\'t match');
+                $session->setFlashdata('banned', 'This user had been banned');
                 return redirect()->to('/login');
             }
         }
@@ -101,6 +113,7 @@ class GeneralUser extends BaseController
     public function register()
     {
         $data = [];
+        $bannedUsers = new BannedUsers_Model();
 
         //Enables me to use functions for working with forms
         helper(['form']);
@@ -109,39 +122,48 @@ class GeneralUser extends BaseController
         //into affect
         if($this->request->getMethod() == 'post')
         {
-            //Validation Rules for registering
-            $rules = [
-                'firstName' => 'required|min_length[3]|max_length[45]',
-                'lastName' => 'required|min_length[3]|max_length[45]',
-                'email' => 'required|min_length[6]|max_length[45]|valid_email|is_unique[user.email]|is_unique[administrator.email]|is_unique[moderator.email]',
-                'passwordHash' => 'required|min_length[8]|max_length[255]',
-                'passwordHash_confirm' => 'matches[passwordHash]',
-            ];
-
-            //Firstly the program will check if the inputted information
-            //matches the rules set for registering. If not the a message 
-            //will be displayed to the user.
-            if(!$this->validate($rules))
-            {
-                $data['validation'] = $this->validator;
-            }else{
-                //Creates an istance of the User Model
-                $model = new User_Model();
-
-                //Gets data from the form and saves it to the $newData array
-                $newData = [
-                    'firstName' => $_POST['firstName'],
-                    'lastName' => $_POST['lastName'],
-                    'email' => $_POST['email'],
-                    'passwordHash' => $_POST['passwordHash']
+            if(!$bannedUsers->checkIfBanned($_POST['email'])){
+                
+                //Validation Rules for registering
+                $rules = [
+                    'firstName' => 'required|min_length[3]|max_length[45]',
+                    'lastName' => 'required|min_length[3]|max_length[45]',
+                    'email' => 'required|min_length[6]|max_length[45]|valid_email|is_unique[user.email]|is_unique[administrator.email]|is_unique[moderator.email]',
+                    'passwordHash' => 'required|min_length[8]|max_length[255]',
+                    'passwordHash_confirm' => 'matches[passwordHash]',
                 ];
 
-                //You take the data from the form and you save the data to the
-                //User model which puts the data into the database
-                $model->save($newData);
+                //Firstly the program will check if the inputted information
+                //matches the rules set for registering. If not the a message 
+                //will be displayed to the user.
+                if(!$this->validate($rules))
+                {
+                    $data['validation'] = $this->validator;
+                }else{
+                    //Creates an istance of the User Model
+                    $model = new User_Model();
+
+                    //Gets data from the form and saves it to the $newData array
+                    $newData = [
+                        'firstName' => $_POST['firstName'],
+                        'lastName' => $_POST['lastName'],
+                        'email' => $_POST['email'],
+                        'passwordHash' => $_POST['passwordHash']
+                    ];
+
+                    //You take the data from the form and you save the data to the
+                    //User model which puts the data into the database
+                    $model->save($newData);
+                    $session = session();
+                    $session->setFlashdata('success', 'Successful Registration');
+                    return redirect()->to('/login');
+                }
+            }
+            else
+            {
                 $session = session();
-                $session->setFlashdata('success', 'Successful Registration');
-                return redirect()->to('/login');
+                $session->setFlashdata('banned', 'This user had been banned');
+                return redirect()->to('/register');
             }
         }
 
@@ -165,23 +187,60 @@ class GeneralUser extends BaseController
         echo view('templates/footer');
     }
 
+    public function rules()
+    {
+        $data = [];
+
+        echo view('templates/header', $data);
+        echo view('rules');
+        echo view('templates/footer');
+    }
+
     public function dashboard()
 	{
-		$model = new Posts_Model();
+		$postModel = new Posts_Model();
+        $userModel = new User_Model();
 
-        $data['newest'] = $model->getNewestPosts();
-
-        if($data){
-            echo view("templates/header", $data);
-            echo view("dashboard");
-            echo view("templates/footer");
-        }
-        else
+        if(session()->get('isLoggedInUser'))
         {
-            $data = [];
-            echo view("templates/header", $data);
-            echo view("dashboard");
-            echo view("templates/footer");
+            $data['newest'] = $postModel->getNewestPosts();
+
+            if($data){
+                echo view("templates/header", $data);
+                echo view("dashboard");
+                echo view("templates/footer");
+            }
+            else
+            {
+                $data = [];
+                echo view("templates/header", $data);
+                echo view("dashboard");
+                echo view("templates/footer");
+            }
+        }
+        elseif(session()->get('isLoggedInAdmin'))
+        {
+            $data['newest'] = $postModel->getNewestPosts();
+            $postsNum = [
+                'postNo' => $postModel->countPosts()
+            ];
+
+            $userNum = [
+                'userNo' => $userModel->countUsers()
+            ];
+
+            if($data){
+                echo view("templates/header", $data + $postsNum + $userNum);
+                echo view("dashboard");
+                echo view("templates/footer");
+            }
+            else
+            {
+                $data = [];
+                echo view("templates/header", $data + $postsNum + $userNum);
+                echo view("dashboard");
+                echo view("templates/footer");
+            }
         }
 	}
 
@@ -189,7 +248,11 @@ class GeneralUser extends BaseController
     {
         $model = new Posts_Model();
 
-        $data['news'] = $model->getPosts();
+        $data = [
+            'news' => $model->orderBy('publishedAT', 'DESC')
+                            ->paginate(10),
+            'pager' => $model->pager
+        ];
 
         echo view("templates/header", $data);
 		echo view("forum/postsPage");

@@ -5,21 +5,35 @@
                 <h1 class="display-4">Welcome, <?= session()->get('firstName')?></h1>
             </div>
         </div>
-        <div class="row row-cols-1 row-cols-md-3 g-4" style="text-align: center; margin-top: 2em;" >
-            <div class="col-3">
-                <button type="button" class="btn btn-secondary">Under Construction</button>
+        <?php if(session()->get('isLoggedInUser')): ?>
+          <div class="row row-cols-1 row-cols-md-2 g-4" style="text-align: center; margin-top: 2em;" >
+            <div class="col-2">
+            <a class="nav-link" href="<?php echo base_url();?>/aboutus">
+                <button type="button" class="btn btn-secondary">About Us</button>
+            </a>
             </div>
-            <div class="col-3">
-                <button type="button" class="btn btn-secondary">Under Construction</button>
-            </div>
-            <div class="col-3">
-                <button type="button" class="btn btn-secondary">Under Construction</button>
+            <div class="col-2">
+            <a class="nav-link" href="<?php echo base_url();?>/rules">
+                <button type="button" class="btn btn-secondary">Rules & Regulations</button>
+            </a>
             </div>
         </div>
+        <?php elseif(session()->get('isLoggedInAdmin')): ?>
+          <div class="row row-cols-1 row-cols-md-2 g-4" style="text-align: center; margin-top: 2em;" >
+            <div class="col-2">
+              <p>Numbers of Users: <?= $userNo?></p>
+            </div>
+            <div class="col-2">
+              <p>Numbers of Posts: <?= $postNo?></p>
+            </div>
+        </div>
+        <?php endif; ?>
+        
     </div>
 </div>
 
 <div class="container">
+<h3 class="text-center">Newest Posts</h3>
 <?php if ($newest): ?>
   <table class="table table-hover">
     <thead>

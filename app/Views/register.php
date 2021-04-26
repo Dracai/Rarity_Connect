@@ -2,6 +2,11 @@
     <div class="row">
         <div class="col-12 col-sm8 offest-sm-2 col-md-6 offset-md-3 mt-5 pt-3 pb-3 bg-white form-wrapper">
             <div class="container">
+            <?php if (session()->get('banned')): ?>
+                <div class="alert alert-warning" role="alert">
+                    <?= session()->get('banned')?>
+                </div>
+            <?php endif; ?>
                 <h3>Register</h3>
                 <hr>
                 <form class="" action="<?php echo base_url();?>/register" method="post">

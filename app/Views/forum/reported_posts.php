@@ -12,14 +12,13 @@
 </div>
 
 <div class="container">
-<h3 style="text-align: center; margin-top: 1em;">Reported Posts</h3>
+<h1 class="text-center" style="margin-top: 1em; font-weight: 600;">Reported Posts</h1>
 <?php if ($news): ?>
   <table class="table table-hover">
     <thead>
       <tr>
         <th scope="col"></th>
-        <th scope="col">All Posts</th>
-        <th scope="col">Posted</th>
+        <th scope="col">Post Title</th>
         <th scope="col">User</th>
         <th scope="col"></th>
         <th scope="col"></th>
@@ -30,7 +29,6 @@
       <tr class="table-light">
         <th scope="row"></th>
         <td style="width: 70%; font-size: 1.3em;"><a href="<?php echo base_url();?>/forum/<?= $newsItem['postID']?>"><?= $newsItem['title']?></a></td>
-        <td style="font-size: 1.15em;"><?= date('M d Y', strtotime($newsItem['published_at']))?></td>
         <td style="font-size: 1.15em;"><?= $newsItem['authorName']?></td>
           <td>
           <a href="<?php echo site_url('Administrator/leavePost/'.$newsItem['postID']);?>" 

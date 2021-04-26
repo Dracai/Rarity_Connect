@@ -6,6 +6,7 @@ use App\Models\Moderator_Model;
 use App\Models\User_Model;
 use App\Models\Posts_Model;
 use App\Models\Reported_Posts;
+use App\Models\BannedUsers_Model;
 
 class Administrator extends BaseController
 {
@@ -13,8 +14,13 @@ class Administrator extends BaseController
     {
         $users = new User_Model();
 
-        $dataUsers['users'] = $users->getUsers();
+        //$dataUsers['users'] = $users->getUsers();
+        //$dataUsers['users'] = $users->paginate(5);
 
+        $dataUsers = [
+            'users' => $users->paginate(5),
+            'pager' => $users->pager,
+        ];
         //This takes the User Id inputted in the search bar
         //getVar function returns a single variable of from the specified field
         $keyword = $this->request->getVar('searchID');
@@ -101,6 +107,26 @@ class Administrator extends BaseController
         $reportedPost->deleteReportedPost($postID);
         $session = session();
 		$session->setFlashdata('reportDeleted', 'Report has been deleted.');
+        return redirect()->back();
+    }
+    
+    public function banUser()
+    {
+        $userModel = new User_Model();
+        $banUserModel = new BannedUsers_Model();
+
+        $urlsplit = explode('/', current_url());
+        $userID = $urlsplit[count($urlsplit) - 1];
+
+        $userDetails = $userModel->searchUser($userID);
+        print_r($userDetails);
+        $user = [
+            'email' => $userDetails->{'email'}
+        ];
+        $banUserModel->save($user);
+        $userModel->deleteUser($userID);
+        $session = session();
+        $session->setFlashData('userBanned', 'User has been banned !');
         return redirect()->back();
     }
 }

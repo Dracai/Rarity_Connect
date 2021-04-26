@@ -37,4 +37,11 @@ class Posts_Model extends Model
         $this->db->table('post')->where('postID', $postID)->delete();
         return;
     }
+
+    function countPosts()
+    {
+        $builder = $this->builder();
+        $query = $builder->countAll();
+        return $query;
+    }
 }

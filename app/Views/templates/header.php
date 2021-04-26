@@ -5,6 +5,9 @@
         <link href="/assets/css/style.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
         <link rel="stylesheet" href="https://bootswatch.com/4/pulse/bootstrap.css">
+        <link rel="icon" type="type/png" href="<?php echo base_url('assets/images/favicon.png'); ?>">
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
 
         <title>Rarity Connect</title>
     </head>
@@ -17,7 +20,7 @@
         <?php if (session()->get('isLoggedInAdmin')):?>
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
             <div class='container'>
-                <a class="navbar-brand" href="<?php echo base_url();?>/dashboard">Rarity Connect</a>
+                <a class="navbar-brand" href="<?php echo base_url();?>/dashboard"><img src="<?php echo base_url('assets/images/RC_1.png'); ?>"></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -29,7 +32,7 @@
                     <a class="nav-link " href="<?php echo base_url();?>/dashboard">Dashboard</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="<?php echo base_url();?>/admin_functions_page">Admin Functions</a>
+                    <a class="nav-link" href="<?php echo base_url();?>/admin_functions_page">View Users</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="<?php echo base_url();?>/forum/postsPage">View Posts</a>
@@ -48,7 +51,7 @@
         <?php elseif (session()->get('isLoggedInUser')):?>
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
             <div class='container'>
-                <a class="navbar-brand" href="<?php echo base_url();?>/dashboard">Rarity Connect</a>
+                <a class="navbar-brand" href="<?php echo base_url();?>/dashboard"><img src="<?php echo base_url('assets/images/RC_1.png'); ?>" style="height: 25px;"></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -62,7 +65,10 @@
                     <a class="nav-link" href="<?php echo base_url();?>/forum/postsPage">View Posts</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="<?php echo base_url();?>#">UnderConstruction</a>
+                    <a class="nav-link" href="<?php echo base_url();?>/aboutus">About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?php echo base_url();?>/rules">Forum Rules</a>
                 </li>
             </ul>
             <ul class="navbar-nav my-2 my-lg-0">
@@ -78,7 +84,7 @@
         <?php else: ?>
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
             <div class='container'>
-                <a class="navbar-brand" href="<?php echo base_url();?>/">Rarity Connect</a>
+                <a class="navbar-brand" href="<?php echo base_url();?>/"><img src="<?php echo base_url('assets/images/RC_1.png'); ?>" style="height: 25px;"></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -90,6 +96,9 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="<?php echo base_url();?>/aboutus">About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?php echo base_url();?>/rules">Forum Rules</a>
                 </li>
             </ul>
             <ul class="navbar-nav mr-1">

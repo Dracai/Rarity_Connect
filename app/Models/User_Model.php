@@ -58,10 +58,6 @@ class User_Model extends Model
             return false;
     }
 
-    public function getUsers() {
-        return $this->findAll();
-    }
-
     public function searchUser($keyword)
     {
         $builder = $this->builder();
@@ -86,5 +82,20 @@ class User_Model extends Model
     {
         $this->db->table('user')->where('idUser', $idUser)->delete();
         return;
+    }
+
+    function getUserEmail($idUser)
+    {
+        $builder = $this->builder();
+        $user = $builder->select('idUser, email')->where('idUser', $idUser)->get()->getResultArray();
+
+        return $user;
+    }
+
+    function countUsers()
+    {
+        $builder = $this->builder();
+        $query = $builder->countAll();
+        return $query;
     }
 }

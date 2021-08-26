@@ -1,6 +1,6 @@
 # Rarity_Connect
 	This is my Codeigniter Form Project.
-	The SQL database is located in the main folder. Import it into MySQL Workbench.
+	The SQL database (rarityconnectdb.sql) is located in the main folder. Import it into MySQL Workbench.
 	
 	Logins made for manuvering around the aplication. You can use these or create your own account.
 	Admin Login - 
